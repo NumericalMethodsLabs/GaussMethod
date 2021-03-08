@@ -23,20 +23,20 @@ Matrix GaussMethod::MakeIdentityMatrix(const Matrix &a) {
     Matrix retv(a);
 
     int max_ind = 0;
-    auto tmp_vec = new double[a.sizerow()];
+    auto tmp_vec = new double[a.count_row()];
 
-    for (int i = 0; i < a.sizerow(); ++i) {
-        retv.GetCol(i, tmp_vec);
-        max_ind = max_elem_ind(tmp_vec + i, a.sizerow() - i) + i;
+    for (int i = 0; i < a.count_row(); ++i) {
+        retv.get_col(i, tmp_vec);
+        max_ind = max_elem_ind(tmp_vec + i, a.count_row() - i) + i;
         if (max_ind == -1) {
             break;
         }
         if (max_ind != i)
-            retv.rowSwap(max_ind, i);
-        retv.multiplyRowByConst(i, 1.0 / retv[i][i]);
-        for (unsigned j = 0; j < retv.sizerow(); ++j) {
+            retv.swap_rows(max_ind, i);
+        retv.mult_row_by_const(i, 1.0 / retv[i][i]);
+        for (unsigned j = 0; j < retv.count_row(); ++j) {
             if (j == i) continue;
-            retv.sumRowByConstAndRow(j, i, -retv[j][i]);
+            retv.sum_row_by_const_to_row(j, i, -retv[j][i]);
         }
     }
     delete [] tmp_vec;
